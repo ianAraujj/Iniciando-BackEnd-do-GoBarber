@@ -40,6 +40,7 @@ class SessionsController{
     // quanto tempo esse token é válido
 
   }
+
 }
 
 export default new SessionsController();
