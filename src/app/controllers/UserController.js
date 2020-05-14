@@ -1,7 +1,12 @@
+import * as Yup from 'yup';
+
 import User from '../models/User';
 
 class UserController {
   async store(req, res) {
+
+    // Verificar se o formato de email ta certo
+    // Verificar se a senha tem pelo menos 6 dígitos
 
     if ((req.body.name) && (req.body.email) && (req.body.password)) {
       const email_exist = await User.findOne({ where: { email: req.body.email } });
@@ -52,10 +57,10 @@ class UserController {
       }
 
       if (new_password && (!(await user.checkHash(Password)))) {
-        return res.status(401).json({ERROR: "Password does not match"});
+        return res.status(401).json({ ERROR: "Password does not match" });
       }
 
-      const {name, email, provider, password_hash} = await user.update({
+      const { name, email, provider, password_hash } = await user.update({
         name: old_name,
         password: new_password,
         provider: Oldprovider,
@@ -77,19 +82,30 @@ class UserController {
   }
 
   async delete(req, res) {
-    const id_recebido = req.params.id;
-    const user = await User.findOne({
-      where: {
-        id: id_recebido
-      }
-    });
+
+
+    const user = await User.findByPk(req.body.idUser);
 
     if (user) {
 
-      //await user.delete();
-      return res.status(400).json({
-        MESSAGE: "User was deleted"
-      })
+      try {
+
+        await user.delete();
+
+        return res.status(400).json({
+          MESSAGE: "User was deleted"
+        })
+
+      } catch (error) {
+
+        console.log(error);
+
+        return res.status(400).json({
+          ERROR: error
+        })
+
+      }
+
 
     } else {
       return res.status(400).json({
@@ -99,20 +115,18 @@ class UserController {
   }
 
   async show(req, res) {
-    const id_recebido = req.params.id;
-    const user = await User.findOne({
-      where: {
-        id: id_recebido
-      }
-    });
+
+    const user = await User.findByPk(req.body.idUser);
 
     if (user) {
+
       return res.json({
         id: user.id,
         email: user.email,
         name: user.name,
         provider: user.provider
       });
+
     } else {
       return res.status(400).json({
         ERROR: "User not found"

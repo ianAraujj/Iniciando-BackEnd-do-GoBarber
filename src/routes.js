@@ -14,5 +14,7 @@ routes.post('/sessions', SessionsController.store);
 
 routes.use(Auth);
 routes.put('/users', UserController.update);
+// routes.delete('/users', UserController.delete);
+routes.get('/users', UserController.show);
 
 export default routes;
