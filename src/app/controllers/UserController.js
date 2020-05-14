@@ -3,7 +3,7 @@ import User from '../models/User';
 class UserController {
   async store(req, res){
 
-    if((req.body.name) && (req.body.email) && (req.body.password_hash)){
+    if((req.body.name) && (req.body.email) && (req.body.password)){
       const email_exist = await User.findOne({where:{ email: req.body.email}});
 
       if(email_exist){
@@ -12,13 +12,14 @@ class UserController {
         });
       }
   
-      const {id, name, email, provider} = await User.create(req.body);
+      const {id, name, email, provider, password_hash} = await User.create(req.body);
   
       return res.json({
         id: id,
         name: name,
         email: email,
-        provider: provider
+        provider: provider,
+        password_hash: password_hash
       });
     }else{
       return res.status(400).json({
