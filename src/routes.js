@@ -1,6 +1,7 @@
 import Router from 'express';
 import UserController from './app/controllers/UserController';
 import SessionsController from './app/controllers/SessionsController';
+import FileController from './app/controllers/FileController';
 import Auth from './app/middlewares/auth';
 import multerConfig from './config/multer';
 import multer from 'multer';
@@ -21,10 +22,6 @@ routes.put('/users', UserController.update);
 routes.get('/users', UserController.show);
 
 // 'file' vai ser o nome do campo
-routes.post('/files', upload.single('file'), (req, res) => {
-  return res.json({
-    ok: "True"
-  })
-})
+routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
