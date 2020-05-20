@@ -4,7 +4,9 @@ import databaseConfig from '../config/database';
 // Criando um array com todos os Models da minha Aplicação
 import User from '../app/models/User';
 import File from '../app/models/File';
-const models = [User, File];
+import Agendamento from '../app/models/Agendamento';
+
+const models = [User, File, Agendamento];
 
 class DataBase {
   constructor() {
