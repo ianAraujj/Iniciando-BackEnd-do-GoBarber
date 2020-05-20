@@ -40,12 +40,13 @@ class UserController {
     const old_name = req.body.name;
     const new_password = req.body.NewPassword;
     const Oldprovider = req.body.provider;
+    const id_avatar = req.body.id_avatar;
 
     const user = await User.findByPk(req.body.idUser);
 
     if (user) {
 
-      if (email_antigo && (user.email != email_antigo)) {
+      if (user.email != email_antigo) {
 
         const email_exist = await User.findOne({ where: { email: email_antigo } });
 
@@ -60,20 +61,16 @@ class UserController {
         return res.status(401).json({ ERROR: "Password does not match" });
       }
 
-      const { name, email, provider, password_hash } = await user.update({
+      const user_update = await user.update({
         name: old_name,
         password: new_password,
         provider: Oldprovider,
-        email: email_antigo
+        email: email_antigo,
+        id_avatar: id_avatar
       });
 
 
-      return res.json({
-        name,
-        provider,
-        email,
-        password_hash
-      });
+      return res.json(user_update);
 
     } else {
       return res.status(401).json({ ERROR: "User does not exists" });
